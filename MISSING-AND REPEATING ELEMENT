@@ -1,0 +1,51 @@
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+void miss_repeat(int arr[], int n, int *repeat, int *miss) {
+    // Step 1: Find max element in the array
+    int max = arr[0];
+    for (int i = 1; i < n; i++) {
+        if (arr[i] > max) max = arr[i];
+    }
+
+    // Step 2: Allocate frequency array up to max element
+    int *frequency = (int *)calloc(max + 1, sizeof(int));
+    if (frequency == NULL) {
+        printf("Memory Error\n");
+        exit(1);
+    }
+
+    // Step 3: Count frequencies (ignore numbers <=0 or >max)
+    for (int i = 0; i < n; i++) {
+        if (arr[i] >= 1 && arr[i] <= max) {
+            frequency[arr[i]]++;
+        }
+    }
+
+    // Step 4: Find missing & repeated
+    for (int i = 1; i <= n; i++) { // check only within 1..n
+        if (frequency[i] == 0) {
+            *miss = i;
+        } else if (frequency[i] == 2) {
+            *repeat = i;
+        }
+    }
+
+    free(frequency);
+}
+
+int main() {
+    int arr[] = {1, 2, 10, 4, 5, 6, 7, 9, 9}; // has out-of-range 10
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int repeat = -1, missing = -1;
+
+    miss_repeat(arr, n, &repeat, &missing);
+
+    printf("Repeated number: %d\n", repeat);
+    printf("Missing number: %d\n", missing);
+
+    return 0;
+}
+
+```
